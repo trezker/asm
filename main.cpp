@@ -134,21 +134,26 @@ public:
 				break;
 			}
 			case ALLEGRO_KEY_BACKSPACE:
-				if(edit_index != 0) {
+				if(edit_index > 0) {
 					if(lines[edit_line].Remove_chr(edit_index-1)) {
 						edit_index--;
+					}
+				} else {
+					if(edit_line > 0) {
+						--edit_line;
+						edit_index = lines[edit_line].Length();
+						lines[edit_line].Append(lines[edit_line+1]);
+						lines.erase(lines.begin()+edit_line+1);
 					}
 				}
 				break;
 			case ALLEGRO_KEY_DELETE:
-				if(edit_index != 0) {
-					if(edit_index < lines[edit_line].Length()) {
-						lines[edit_line].Remove_chr(edit_index);
-					} else {
-						if(edit_line < lines.size() - 1) {
-							lines[edit_line].Append(lines[edit_line+1]);
-							lines.erase(lines.begin()+edit_line+1);
-						}
+				if(edit_index < lines[edit_line].Length()) {
+					lines[edit_line].Remove_chr(edit_index);
+				} else {
+					if(edit_line < lines.size() - 1) {
+						lines[edit_line].Append(lines[edit_line+1]);
+						lines.erase(lines.begin()+edit_line+1);
 					}
 				}
 				break;
