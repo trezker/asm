@@ -69,6 +69,10 @@ public:
 	int Length() {
 		return al_ustr_length(str);
 	}
+
+	void Append(const Allegro_ustr& o) {
+		al_ustr_append(str, o.str);
+	}
 };
 
 typedef std::vector<Allegro_ustr> Lines;
@@ -138,8 +142,13 @@ public:
 				break;
 			case ALLEGRO_KEY_DELETE:
 				if(edit_index != 0) {
-					if(lines[edit_line].Remove_chr(edit_index)) {
-						edit_index;
+					if(edit_index < lines[edit_line].Length()) {
+						lines[edit_line].Remove_chr(edit_index);
+					} else {
+						if(edit_line < lines.size() - 1) {
+							lines[edit_line].Append(lines[edit_line+1]);
+							lines.erase(lines.begin()+edit_line+1);
+						}
 					}
 				}
 				break;
